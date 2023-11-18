@@ -13,26 +13,27 @@ const App = () => {
     setItems(apiData);
   }, []);
 
-  const handleSort = () => {
-    const nullableItems = items.filter((item) => !Object.values(item).includes(null));
-    // console.log('nullable', nullableItems);
-    let sortedItems;
-    if (!sort || sort === 'id-asc') {
-      sortedItems = [...items].sort((a, b) => b.id - a.id);
-      setSort('id-desc');
-    } else {
-      sortedItems = [...items].sort((a, b) => a.id - b.id);
-      setSort('id-asc');
-    }
+  const handleSort = (sortValue) => {
+    const sortedItems = [...items].sort((a, b) => {
+      if (b[sortValue] === null) return -1;
 
+      if (typeof a[sortValue] === 'string') {
+        return sort === 'asc'
+          ? a[sortValue].localeCompare(b[sortValue])
+          : b[sortValue].localeCompare(a[sortValue]);
+      } else {
+        return sort === 'asc' ? a[sortValue] - b[sortValue] : b[sortValue] - a[sortValue];
+      }
+    });
+    setSort(sort === 'asc' ? 'desc' : 'asc');
     setItems(sortedItems);
   };
 
   return (
     <>
       <h1>NAMIS test project</h1>
-      <button onClick={handleSort}>Sort</button>
-      <Table items={items} config={config} />
+      {/* <button onClick={() => handleSort('dttmCreated')}>Sort</button> */}
+      <Table handleSort={handleSort} items={items} config={config} />
     </>
   );
 };

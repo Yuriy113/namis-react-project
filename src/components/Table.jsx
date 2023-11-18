@@ -1,12 +1,20 @@
 import React from 'react';
+import { sortedValues } from '../config/config';
 
-const Table = ({ items, config }) => {
+const Table = ({ items, config, handleSort }) => {
   return (
     <table>
       <thead>
         <tr>
           {config.map((el) => {
-            return <th key={el.key}>{el.head_title}</th>;
+            return (
+              <th
+                onClick={sortedValues.includes(el.key) ? () => handleSort(el.key) : null}
+                key={el.key}
+              >
+                {el.head_title}
+              </th>
+            );
           })}
         </tr>
       </thead>
