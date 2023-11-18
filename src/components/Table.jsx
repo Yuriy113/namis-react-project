@@ -1,10 +1,6 @@
 import React from 'react';
-import json from '../store/apiData';
-import { config } from '../store/tableConfig';
 
-const items = json.data.items;
-
-const Table = () => {
+const Table = ({ items, config }) => {
   return (
     <table>
       <thead>
@@ -23,7 +19,7 @@ const Table = () => {
               <td>{el.description}</td>
               <td>{el.dttmCreated}</td>
               <td>{el.reactLevel}</td>
-              <td>{el.enabled}</td>
+              <td>{el.enabled !== null && (el.enabled ? 'Да' : 'Нет')}</td>
               <td>{el.tags}</td>
             </tr>
           );
