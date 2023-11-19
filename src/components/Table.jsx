@@ -1,38 +1,70 @@
-import React from 'react';
-import { sortedValues } from '../config/config';
+import React, { useState } from 'react';
+import { sortableValues, filterableValues, checkValues } from '../config/config';
+import { formatDate } from '../utils/formatDate';
+import CustomSelect from './CustomSelect';
+import Tbody from './Tbody';
 
-const Table = ({ items, config, handleSort }) => {
+const Table = ({ items, config, handleSort, handleInput, tags, levels, filterData }) => {
+  const [visible, setVisible] = useState(false);
+
+  const handleClick = () => {
+    setVisible((state) => !state);
+  };
+
   return (
     <table>
       <thead>
         <tr>
-          {config.map((el) => {
+          {config.map((component) => {
+            const key = component.key.trim();
             return (
-              <th
-                onClick={sortedValues.includes(el.key) ? () => handleSort(el.key) : null}
-                key={el.key}
-              >
-                {el.head_title}
+              <th key={key} style={{ width: component.width }}>
+                {component.head_title}
+                <br />
+                {sortableValues.includes(key) && (
+                  <button onClick={() => handleSort(key)}>sort</button>
+                )}
+                {filterableValues.includes(key) && (
+                  <input
+                    onInput={(e) => handleInput(e, key === 'title' ? false : true, key)}
+                    type="text"
+                    placeholder="search"
+                  />
+                )}
+                {checkValues.includes(key) && (
+                  <>
+                    {key === 'tags' ? (
+                      <>
+                        <input type="button" value="select tags" onClick={handleClick} />
+                        <CustomSelect
+                          visible={visible}
+                          tags={tags}
+                          handleInput={handleInput}
+                          filterData={filterData}
+                        />
+                      </>
+                    ) : (
+                      <select
+                        onChange={(e) => {
+                          filterData(e.target.value, false, 'reactLevel');
+                        }}
+                      >
+                        <>
+                          <option value={''}>none</option>
+                          {levels.map((level) => {
+                            return <option key={level}>{level}</option>;
+                          })}
+                        </>
+                      </select>
+                    )}
+                  </>
+                )}
               </th>
             );
           })}
         </tr>
       </thead>
-      <tbody>
-        {items.map((el) => {
-          return (
-            <tr>
-              <td>{el.id}</td>
-              <td>{el.title}</td>
-              <td>{el.description}</td>
-              <td>{el.dttmCreated}</td>
-              <td>{el.reactLevel}</td>
-              <td>{el.enabled !== null && (el.enabled ? 'Да' : 'Нет')}</td>
-              <td>{el.tags}</td>
-            </tr>
-          );
-        })}
-      </tbody>
+      <Tbody items={items} />
     </table>
   );
 };

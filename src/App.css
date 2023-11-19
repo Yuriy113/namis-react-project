@@ -1,0 +1,50 @@
+body {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
+
+table,
+th,
+td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 5px;
+}
+
+th {
+  background-color: rgb(255, 206, 206);
+}
+
+table {
+  margin: 0 auto;
+}
+
+tr {
+  text-align: center;
+}
+
+.custom-select {
+  position: absolute;
+  background-color: #fff;
+  text-align: left;
+  padding: 15px 30px;
+  border: 1px solid #333;
+}
+
+.hidden {
+  display: none;
+}
+
+.visible {
+  display: block;
+}
+
+h1 {
+  text-align: center;
+}
